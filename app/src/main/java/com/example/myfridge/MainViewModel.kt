@@ -74,11 +74,19 @@ class MainViewModel(
         viewModelScope.launch { repository.insertItem(item.copy(id = 0)) }
     }
 
-    fun moveShoppingListToFridge() {
+    fun moveItemToFridge(item: Item, hasExpiry: Boolean, expiryDays: Int) {
+        viewModelScope.launch {
+            val date = Calendar.getInstance().time.time
+            repository.insertItem(item.copy(id = 0, type = "myFridge", expiryDate = hasExpiry, days = expiryDays, date = date))
+            repository.deleteItem(item)
+        }
+    }
+
+    fun moveShoppingListToFridge(hasExpiry: Boolean, expiryDays: Int) {
         viewModelScope.launch {
             val date = Calendar.getInstance().time.time
             for (item in shoppingListState.value) {
-                repository.insertItem(item.copy(id = 0, type = "myFridge", date = date))
+                repository.insertItem(item.copy(id = 0, type = "myFridge", expiryDate = hasExpiry, days = expiryDays, date = date))
                 repository.deleteItem(item)
             }
         }

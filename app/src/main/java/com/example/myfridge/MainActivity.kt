@@ -74,6 +74,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.myfridge.reusables.EditCard
 import com.example.myfridge.reusables.ItemCard
+import com.example.myfridge.reusables.MoveToFridgeDialog
 import com.example.myfridge.reusables.TopBar
 import com.example.myfridge.ui.theme.MyFridgeTheme
 
@@ -369,6 +370,19 @@ fun ShoppingList(contentPadding: PaddingValues, viewModel: MainViewModel, navCon
     val filteredList = if (searchQuery.isBlank()) itemList
         else itemList.filter { it.name.contains(searchQuery, ignoreCase = true) }
     val focusManager = LocalFocusManager.current
+    var showMoveAllDialog by remember { mutableStateOf(false) }
+
+    if (showMoveAllDialog) {
+        MoveToFridgeDialog(
+            title = "Move all to My Fridge",
+            subtitle = "${itemList.size} item${if (itemList.size == 1) "" else "s"} — set expiry:",
+            onConfirm = { hasExpiry, days ->
+                viewModel.moveShoppingListToFridge(hasExpiry, days)
+                showMoveAllDialog = false
+            },
+            onDismiss = { showMoveAllDialog = false }
+        )
+    }
 
     Column(modifier = Modifier.padding(contentPadding)) {
         TopBar(
@@ -420,7 +434,7 @@ fun ShoppingList(contentPadding: PaddingValues, viewModel: MainViewModel, navCon
             if (itemList.isNotEmpty()) {
                 item {
                     Button(
-                        onClick = { viewModel.moveShoppingListToFridge() },
+                        onClick = { showMoveAllDialog = true },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp)
