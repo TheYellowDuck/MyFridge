@@ -25,6 +25,7 @@ class UpdateDaysWorker(context: Context, params: WorkerParameters) : CoroutineWo
     override suspend fun doWork(): Result {
         ensureNotificationChannel()
         val repository = OfflineItemRepository(ItemDatabase.getDatabase(applicationContext).itemDao())
+        val notificationsEnabled = AlarmScheduler.loadNotificationsEnabled(applicationContext)
         val threshold = AlarmScheduler.loadWarnDays(applicationContext)
         val items = repository.getFridgeItemsStream().first()
         for (item in items) {
@@ -33,7 +34,7 @@ class UpdateDaysWorker(context: Context, params: WorkerParameters) : CoroutineWo
                 val daysPassed = TimeUnit.DAYS.convert(now - item.date, TimeUnit.MILLISECONDS)
                 val updated = item.copy(days = item.days - daysPassed.toInt(), date = now)
                 repository.updateItem(updated)
-                if (updated.days <= threshold) sendExpiryNotification(updated)
+                if (notificationsEnabled && updated.days in -1..threshold) sendExpiryNotification(updated)
             }
         }
         return Result.success()

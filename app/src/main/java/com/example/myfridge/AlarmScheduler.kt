@@ -16,6 +16,7 @@ object AlarmScheduler {
     const val DEFAULT_MINUTE = 50
     const val KEY_WARN_DAYS = "warn_days"
     const val DEFAULT_WARN_DAYS = 2
+    const val KEY_NOTIF_ENABLED = "notifications_enabled"
     private const val WORK_TAG = "daily_expiry_update"
 
     /**
@@ -74,4 +75,15 @@ object AlarmScheduler {
     fun loadWarnDays(context: Context): Int =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getInt(KEY_WARN_DAYS, DEFAULT_WARN_DAYS)
+
+    fun saveNotificationsEnabled(context: Context, enabled: Boolean) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean(KEY_NOTIF_ENABLED, enabled)
+            .apply()
+    }
+
+    fun loadNotificationsEnabled(context: Context): Boolean =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(KEY_NOTIF_ENABLED, true)
 }

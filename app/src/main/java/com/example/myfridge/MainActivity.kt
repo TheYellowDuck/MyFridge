@@ -22,14 +22,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -84,6 +90,8 @@ sealed class Screens(val route: String) {
     object ShoppingList : Screens("shoppingList")
     object Settings : Screens("settings")
 }
+
+enum class SortMode { Expiry, Alphabetical }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -219,9 +227,14 @@ fun MyFridge(contentPadding: PaddingValues, viewModel: MainViewModel, navControl
     val itemList by viewModel.itemListState.collectAsState()
     var searchExpanded by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
+    var sortMode by remember { mutableStateOf(SortMode.Expiry) }
+    var showSortMenu by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+
     val filteredList = if (searchQuery.isBlank()) itemList
         else itemList.filter { it.name.contains(searchQuery, ignoreCase = true) }
-    val focusManager = LocalFocusManager.current
+    val displayList = if (sortMode == SortMode.Alphabetical)
+        filteredList.sortedBy { it.name.lowercase() } else filteredList
 
     Column(modifier = Modifier.padding(contentPadding)) {
         TopBar(
@@ -229,6 +242,30 @@ fun MyFridge(contentPadding: PaddingValues, viewModel: MainViewModel, navControl
             title = { Text("My Fridge", style = MaterialTheme.typography.titleLarge) },
             actionButton = {
                 Row {
+                    Box {
+                        IconButton(onClick = { showSortMenu = true }) {
+                            Icon(Icons.Default.Sort, contentDescription = "Sort")
+                        }
+                        DropdownMenu(
+                            expanded = showSortMenu,
+                            onDismissRequest = { showSortMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Sort by expiry") },
+                                leadingIcon = if (sortMode == SortMode.Expiry) ({
+                                    Icon(Icons.Default.Check, contentDescription = null)
+                                }) else null,
+                                onClick = { sortMode = SortMode.Expiry; showSortMenu = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Sort A–Z") },
+                                leadingIcon = if (sortMode == SortMode.Alphabetical) ({
+                                    Icon(Icons.Default.Check, contentDescription = null)
+                                }) else null,
+                                onClick = { sortMode = SortMode.Alphabetical; showSortMenu = false }
+                            )
+                        }
+                    }
                     IconButton(onClick = {
                         searchExpanded = !searchExpanded
                         if (!searchExpanded) { searchQuery = ""; focusManager.clearFocus() }
@@ -271,7 +308,7 @@ fun MyFridge(contentPadding: PaddingValues, viewModel: MainViewModel, navControl
         ) {
             when {
                 itemList.isEmpty() -> item { EmptyState(R.drawable.logo, "Your fridge is empty — add an item below.") }
-                filteredList.isEmpty() -> item {
+                displayList.isEmpty() -> item {
                     Text(
                         "No items match \"$searchQuery\"",
                         style = MaterialTheme.typography.bodyMedium,
@@ -280,7 +317,7 @@ fun MyFridge(contentPadding: PaddingValues, viewModel: MainViewModel, navControl
                     )
                 }
             }
-            items(filteredList, key = { it.id }) { item ->
+            items(displayList, key = { it.id }) { item ->
                 ItemCard(viewModel = viewModel, item = item)
             }
             item { EditCard(viewModel = viewModel, type = "myFridge") }
@@ -483,6 +520,7 @@ fun Settings(contentPadding: PaddingValues, navController: NavController, viewMo
         is24Hour = true
     )
     var warnDays by remember { mutableStateOf(AlarmScheduler.loadWarnDays(context)) }
+    var notificationsEnabled by remember { mutableStateOf(AlarmScheduler.loadNotificationsEnabled(context)) }
 
     if (showTimePicker) {
         Dialog(onDismissRequest = { showTimePicker = false }) {
@@ -533,14 +571,31 @@ fun Settings(contentPadding: PaddingValues, navController: NavController, viewMo
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            // ── Notification time ──────────────────────────────────────────
-            Text("Notifications", style = MaterialTheme.typography.titleMedium)
+            // ── Notifications ──────────────────────────────────────────────
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Notifications", style = MaterialTheme.typography.titleMedium)
+                Switch(
+                    checked = notificationsEnabled,
+                    onCheckedChange = {
+                        notificationsEnabled = it
+                        AlarmScheduler.saveNotificationsEnabled(context, it)
+                    }
+                )
+            }
             Spacer(Modifier.height(4.dp))
             Text(
                 "Daily time to check expiry and send alerts.",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (notificationsEnabled) MaterialTheme.colorScheme.onSurface
+                        else MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(Modifier.height(12.dp))
+            AnimatedVisibility(visible = notificationsEnabled) {
+                Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     "%02d:%02d".format(displayHour, displayMinute),
@@ -559,19 +614,16 @@ fun Settings(contentPadding: PaddingValues, navController: NavController, viewMo
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-
-            Spacer(Modifier.height(24.dp))
-            Divider()
-            Spacer(Modifier.height(24.dp))
-
+            Spacer(Modifier.height(16.dp))
             // ── Expiry warning threshold ───────────────────────────────────
-            Text("Expiry warning", style = MaterialTheme.typography.titleMedium)
+            Text("Expiry warning", style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(4.dp))
             Text(
-                "Send a notification when an item expires within this many days.",
+                "Notify when an item expires within this many days.",
                 style = MaterialTheme.typography.bodyMedium
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(
                     onClick = {
@@ -601,6 +653,8 @@ fun Settings(contentPadding: PaddingValues, navController: NavController, viewMo
                     Icon(painterResource(R.drawable.add), contentDescription = "Increase")
                 }
             }
+                } // close Column
+            } // close AnimatedVisibility
 
             Spacer(Modifier.height(24.dp))
             Divider()
