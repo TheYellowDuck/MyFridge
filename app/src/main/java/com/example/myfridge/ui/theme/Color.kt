@@ -1,4 +1,4 @@
-package com.example.myfridge.ui.theme
+package com.iamtherealgeorge.myfridge.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.example.myfridge.data
+package com.iamtherealgeorge.myfridge.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,12 +1,12 @@
-package com.example.myfridge
+package com.iamtherealgeorge.myfridge
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.myfridge.data.Item
-import com.example.myfridge.data.ItemDatabase
-import com.example.myfridge.data.OfflineItemRepository
+import com.iamtherealgeorge.myfridge.data.Item
+import com.iamtherealgeorge.myfridge.data.ItemDatabase
+import com.iamtherealgeorge.myfridge.data.OfflineItemRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace 'com.example.myfridge'
-    compileSdk 34
+    namespace 'com.iamtherealgeorge.myfridge'
+    compileSdk 35
 
     defaultConfig {
-        applicationId "com.example.myfridge"
+        applicationId "com.iamtherealgeorge.myfridge"
         minSdk 30
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        targetSdk 35
+        versionCode 4
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

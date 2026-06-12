@@ -1,9 +1,12 @@
-package com.example.myfridge
+package com.iamtherealgeorge.myfridge
 
+import com.iamtherealgeorge.myfridge.R
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -78,11 +81,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.myfridge.reusables.EditCard
-import com.example.myfridge.reusables.ItemCard
-import com.example.myfridge.reusables.MoveToFridgeDialog
-import com.example.myfridge.reusables.TopBar
-import com.example.myfridge.ui.theme.MyFridgeTheme
+import com.iamtherealgeorge.myfridge.reusables.EditCard
+import com.iamtherealgeorge.myfridge.reusables.ItemCard
+import com.iamtherealgeorge.myfridge.reusables.MoveToFridgeDialog
+import com.iamtherealgeorge.myfridge.reusables.TopBar
+import com.iamtherealgeorge.myfridge.ui.theme.MyFridgeTheme
 
 sealed class Screens(val route: String) {
     object MyFridge : Screens("myFridge")
@@ -96,6 +99,7 @@ enum class SortMode { Expiry, Alphabetical }
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS") == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, arrayOf("android.permission.POST_NOTIFICATIONS"), 1)
         }
@@ -143,6 +147,7 @@ fun MainActivityScreen() {
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             NavigationBar {

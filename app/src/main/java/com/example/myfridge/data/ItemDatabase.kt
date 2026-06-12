@@ -1,4 +1,4 @@
-package com.example.myfridge.data
+package com.iamtherealgeorge.myfridge.data
 
 import android.content.Context
 import androidx.room.Database

@@ -1,4 +1,4 @@
-package com.example.myfridge.reusables
+package com.iamtherealgeorge.myfridge.reusables
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack

@@ -1,5 +1,6 @@
-package com.example.myfridge
+package com.iamtherealgeorge.myfridge
 
+import com.iamtherealgeorge.myfridge.R
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,9 +12,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.myfridge.data.Item
-import com.example.myfridge.data.ItemDatabase
-import com.example.myfridge.data.OfflineItemRepository
+import com.iamtherealgeorge.myfridge.data.Item
+import com.iamtherealgeorge.myfridge.data.ItemDatabase
+import com.iamtherealgeorge.myfridge.data.OfflineItemRepository
 import kotlinx.coroutines.flow.first
 import java.util.Calendar
 import java.util.concurrent.TimeUnit

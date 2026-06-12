@@ -1,4 +1,4 @@
-package com.example.myfridge
+package com.iamtherealgeorge.myfridge
 
 import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy

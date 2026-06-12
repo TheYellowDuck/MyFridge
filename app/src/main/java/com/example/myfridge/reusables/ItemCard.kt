@@ -1,4 +1,4 @@
-package com.example.myfridge.reusables
+package com.iamtherealgeorge.myfridge.reusables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -49,9 +49,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.myfridge.MainViewModel
-import com.example.myfridge.R
-import com.example.myfridge.data.Item
+import com.iamtherealgeorge.myfridge.MainViewModel
+import com.iamtherealgeorge.myfridge.R
+import com.iamtherealgeorge.myfridge.data.Item
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

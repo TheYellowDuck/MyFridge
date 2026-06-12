@@ -3,11 +3,7 @@
 A clean, modern Android app for tracking what's in your fridge, getting notified before things expire, and keeping your shopping organised — all in one place.
 
 <p align="center">
-  <img src="screenshots/myfridge.png" alt="My Fridge screenshot" width="260"/>
-  &nbsp;&nbsp;
-  <img src="screenshots/shopping.png" alt="Shopping List screenshot" width="260"/>
-  &nbsp;&nbsp;
-  <img src="screenshots/settings.png" alt="Settings screenshot" width="260"/>
+  <video src="https://github.com/user-attachments/assets/7f06bf0e-1fc3-4014-a90a-da466ed11d84" width="320" controls autoplay loop muted></video>
 </p>
 
 ---
@@ -29,15 +25,18 @@ A clean, modern Android app for tracking what's in your fridge, getting notified
 
 > **Requires Android 11 (API 30) or higher.**
 
-1. Go to the [**Releases**](../../releases/latest) page and download `MyFridge.apk`
-2. On your Android device open **Settings → Apps → Special app access → Install unknown apps** and allow your browser or Files app
-3. Open the downloaded APK and tap **Install**
-4. Launch **My Fridge** from your home screen
+Download on [**Google Play**](https://play.google.com/store/apps/details?id=com.iamtherealgeorge.myfridge).
+
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.iamtherealgeorge.myfridge">
+    <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="80"/>
+  </a>
+</p>
 
 ## Tech Stack
 
 | Layer | Technology |
-|---|---|
+| --- | --- |
 | Language | Kotlin |
 | UI | Jetpack Compose + Material 3 |
 | Navigation | Navigation Compose |
@@ -45,7 +44,7 @@ A clean, modern Android app for tracking what's in your fridge, getting notified
 | Background work | WorkManager CoroutineWorker |
 | State management | ViewModel + StateFlow |
 | Persistence | DataStore / SharedPreferences |
-| Build | Gradle 8.6, AGP 8.2.2 |
+| Build | Gradle 8.9, AGP 8.7.3 |
 
 ## Build from Source
 
@@ -60,12 +59,12 @@ JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" \
   ./gradlew installDebug
 ```
 
-The app targets API 34 and requires a device or emulator running Android 11+.
+The app targets API 35 and requires a device or emulator running Android 11+.
 
 ## Project Structure
 
-```
-app/src/main/java/com/example/myfridge/
+```text
+app/src/main/java/com/example/myfridge/  (package: com.iamtherealgeorge.myfridge)
 ├── data/                  # Room entities, DAO, repository
 ├── receivers/             # (superseded by WorkManager)
 ├── reusables/             # Shared composables (ItemCard, EditCard, TopBar)
