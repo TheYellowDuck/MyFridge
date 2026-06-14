@@ -103,4 +103,4 @@ app/src/main/java/com/example/myfridge/  (package: com.iamtherealgeorge.myfridge
 
 ## License
 
-MIT
+Licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0) — see [LICENSE](LICENSE). You may use and adapt this work for non-commercial purposes with attribution, but you may not sell it.
