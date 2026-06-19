@@ -103,4 +103,4 @@ app/src/main/java/com/example/myfridge/  (package: com.iamtherealgeorge.myfridge
 
 ## License
 
-Licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0) — see [LICENSE](LICENSE). You may use and adapt this work for non-commercial purposes with attribution, but you may not sell it.
+Licensed under the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/) — see [LICENSE](LICENSE). You may use, modify, and share this work for any non-commercial purpose with attribution, but not for commercial purposes (including selling it).
